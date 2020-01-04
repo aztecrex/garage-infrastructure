@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import cdk = require('@aws-cdk/core');
-import { GarageInfrastructureStack } from '../lib/garage-infrastructure-stack';
+import { Infrastructure } from '../lib/infrastructure';
 
 const app = new cdk.App();
-new GarageInfrastructureStack(app, 'GarageInfrastructureStack');
+new Infrastructure(app);
