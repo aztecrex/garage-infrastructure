@@ -4,5 +4,9 @@
   "hosted-zone:account=299766559344:domainName=gregwiley.com:region=us-east=1": {
     "Id": "/hostedzone/Z4WW1XSA9061Y",
     "Name": "gregwiley.com."
+  },
+  "hosted-zone:account=299766559344:domainName=gregwiley.com:region=us-east-1": {
+    "Id": "/hostedzone/Z4WW1XSA9061Y",
+    "Name": "gregwiley.com."
   }
 }
