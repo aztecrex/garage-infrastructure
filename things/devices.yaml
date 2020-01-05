@@ -1,0 +1,85 @@
+# not using this in this project, it's for reference
+# why did we create a policy where a device can do
+# anything in iot: ?
+
+AWSTemplateFormatVersion: '2010-09-09'
+
+Resources:
+
+
+## Two policies because you can't change an IoT policy while it is
+## in effect. After modifying the one not in use, you have to
+## cause all the devices to use the new policy. See device.yaml
+
+
+  Policy1:
+    Type: AWS::IoT::Policy
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - iot:Connect
+            Resource:
+              - "*"
+          - Effect: Allow
+            Action:
+              - iot:UpdateThingShadow
+              - iot:GetThingShadow
+            Resource:
+              - !Sub arn:aws:iot:${AWS::Region}:${AWS::AccountId}:thing/${!iot:Connection.Thing.ThingName}
+          - Effect: Allow
+            Action:
+              - iot:Publish
+              - iot:Subscribe
+              - iot:Receive
+            Resource:
+              - !Sub arn:aws:iot:${AWS::Region}:${AWS::AccountId}:topic/$aws/things/${!iot:Connection.Thing.ThingName}/shadow/*
+              - !Sub arn:aws:iot:${AWS::Region}:${AWS::AccountId}:topic/iot-demo/${!iot:Connection.Thing.ThingName}
+              - !Sub arn:aws:iot:${AWS::Region}:${AWS::AccountId}:topic/iot-demo/general
+
+  Policy2:
+    Type: AWS::IoT::Policy
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              # - iot:Connect
+              - iot:*
+            Resource:
+              - "*"
+          - Effect: Allow
+            Action:
+              - iot:UpdateThingShadow
+              - iot:GetThingShadow
+            Resource:
+              - !Sub arn:aws:iot:${AWS::Region}:${AWS::AccountId}:thing/${!iot:Connection.Thing.ThingName}
+          - Effect: Allow
+            Action:
+              - iot:Publish
+              - iot:Receive
+            Resource:
+              - !Sub arn:aws:iot:${AWS::Region}:${AWS::AccountId}:topic/$aws/things/${!iot:Connection.Thing.ThingName}/shadow/*
+              - !Sub arn:aws:iot:${AWS::Region}:${AWS::AccountId}:topic/iot-demo/${!iot:Connection.Thing.ThingName}
+              - !Sub arn:aws:iot:${AWS::Region}:${AWS::AccountId}:topic/iot-demo/general
+          - Effect: Allow
+            Action:
+              - iot:Subscribe
+            Resource:
+              - !Sub arn:aws:iot:${AWS::Region}:${AWS::AccountId}:topicfilter/$aws/things/${!iot:Connection.Thing.ThingName}/shadow/*
+              - !Sub arn:aws:iot:${AWS::Region}:${AWS::AccountId}:topicfilter/iot-demo/${!iot:Connection.Thing.ThingName}
+              - !Sub arn:aws:iot:${AWS::Region}:${AWS::AccountId}:topicfilter/iot-demo/general
+
+
+Outputs:
+  DevicePolicy1:
+    Value: !Ref Policy1
+    Export:
+        Name: !Sub ${AWS::StackName}-DevicePolicy1
+  DevicePolicy2:
+    Value: !Ref Policy2
+    Export:
+        Name: !Sub ${AWS::StackName}-DevicePolicy2
