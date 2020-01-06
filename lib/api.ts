@@ -62,6 +62,10 @@ class NodeFunction extends lambda.Function {
             code: lambda.Code.fromInline(code || DUMB_NODE_CODE),
             handler: 'index.handler',
         });
+        this.addToRolePolicy(new iam.PolicyStatement({
+            actions: ['iot:*'],
+            resources: ['*'],
+        }));
     }
 }
 
