@@ -87,7 +87,7 @@ class Compute extends cdk.Stack {
         this.operateFunction = new NodeFunction(this, 'operate', CANNED_OPERATE_CODE);
         this.upFunction = new NodeFunction(this, 'up', CANNED_OPERATE_CODE);
         this.downFunction = new NodeFunction(this, 'down', CANNED_OPERATE_CODE);
-        this.downFunction = new NodeFunction(this, 'switch', CANNED_STATUS_CODE);
+        this.switchFunction = new NodeFunction(this, 'switch', CANNED_STATUS_CODE);
     }
 }
 
@@ -116,31 +116,10 @@ class Gateway extends cdk.Stack {
         });
 
         this.addResource('operate', { method: 'POST', function: compute.operateFunction });
-        // const operate = new api.Resource(this, 'operate', {
-        //     parent: this.base,
-        //     pathPart: 'operate',
-        // });
-        // operate.addMethod('POST', new api.LambdaIntegration(compute.operateFunction));
-
         this.addResource('up', { method: 'POST', function: compute.upFunction });
-        // const up = new api.Resource(this, 'up', {
-        //     parent: this.base,
-        //     pathPart: 'up',
-        // });
-        // up.addMethod('POST', new api.LambdaIntegration(compute.upFunction));
-
-        const down = new api.Resource(this, 'down', {
-            parent: this.base,
-            pathPart: 'down',
-        });
-        down.addMethod('POST', new api.LambdaIntegration(compute.downFunction));
-
+        this.addResource('down', { method: 'POST', function: compute.downFunction });
         this.addResource('status', {method: 'GET', function: compute.statusFunction });
-        // const status = new api.Resource(this, 'status', {
-        //     parent: this.base,
-        //     pathPart: 'status',
-        // });
-        // status.addMethod('GET', new api.LambdaIntegration(compute.statusFunction));
+        this.addResource('switch', {method: 'GET', function: compute.switchFunction });
     }
 
     private addResource(path: string, ...methods: MethodSpec[]) {
