@@ -80,12 +80,14 @@ class Compute extends cdk.Stack {
     public readonly operateFunction: lambda.Function;
     public readonly upFunction: lambda.Function;
     public readonly downFunction: lambda.Function;
+    public readonly switchFunction: lambda.Function;
     constructor(scope: cdk.Construct) {
         super(scope, 'compute');
         this.statusFunction = new NodeFunction(this, 'status', CANNED_STATUS_CODE);
         this.operateFunction = new NodeFunction(this, 'operate', CANNED_OPERATE_CODE);
         this.upFunction = new NodeFunction(this, 'up', CANNED_OPERATE_CODE);
         this.downFunction = new NodeFunction(this, 'down', CANNED_OPERATE_CODE);
+        this.downFunction = new NodeFunction(this, 'switch', CANNED_STATUS_CODE);
     }
 }
 
